@@ -1,0 +1,15 @@
+/dist
+
+/node_modules
+
+/test
+
+.env.example
+
+.eslintrc.js
+
+.gitignore
+
+.prettierrc
+
+README.md
