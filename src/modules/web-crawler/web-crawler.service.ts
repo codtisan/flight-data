@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import puppeteer from 'puppeteer';
+import { TravelDestinations } from 'src/constants/destinations';
+import { WebElement } from 'src/constants/web-elements';
 
 @Injectable()
 export class WebCrawlerService {
@@ -7,10 +9,10 @@ export class WebCrawlerService {
         const browser = await puppeteer.launch({ headless: false});
         const page = await browser.newPage();
         
-        await page.goto('https://www.google.com/travel/flights?gl=HK&hl=en');
+        await page.goto(`https://www.google.com/travel/flights?${TravelDestinations.Okinawa}`);
         
         await page.setViewport({width: 1080, height: 1024});
-        
-        await browser.close();
+
+        await page.click(WebElement.DepartureButton)
     }
 }
