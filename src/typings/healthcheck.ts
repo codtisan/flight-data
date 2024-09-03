@@ -1,5 +1,5 @@
 export type HealthResponseDto = {
-    status: "success" | "fail"
-    message: string
-    timestamp: string
-}
+  status: 'success' | 'fail';
+  message: string;
+  timestamp: string;
+};

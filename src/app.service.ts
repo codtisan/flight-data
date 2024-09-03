@@ -5,9 +5,9 @@ import { Time } from './utils/time';
 export class AppService {
   checkHealth(): HealthResponseDto {
     return {
-      status: "success",
-      message: "OK!",
-      timestamp: Time.getCurrentTime()
+      status: 'success',
+      message: 'OK!',
+      timestamp: Time.getCurrentTime(),
     };
   }
 }

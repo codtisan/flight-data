@@ -1,3 +1,5 @@
 export enum WebElement {
-    DepartureButton = 'input[placeholder="Departure"]'
+  DepartureButton = 'input[placeholder="Departure"]',
+
+  MonthData = 'div[role="rowgroup"]',
 }
