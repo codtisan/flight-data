@@ -15,4 +15,7 @@ export class FlightOptionDto {
   @IsNotEmpty()
   @Min(1)
   numberOfCheaper: number;
+
+  @IsNotEmpty()
+  destination: string;
 }

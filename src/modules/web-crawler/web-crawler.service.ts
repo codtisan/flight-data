@@ -18,13 +18,18 @@ export class WebCrawlerService {
     selectedOptions: FlightOptionDto,
   ): Promise<FlightResponseDto> {
     try {
-      const browser = await puppeteer.launch({ headless: false });
+      const browser = await puppeteer.launch({ headless: true });
       const page = await browser.newPage();
       this.logger.log('Successfully Launch browser');
 
-      await page.goto(
-        `https://www.google.com/travel/flights?${TravelDestinations.Okinawa}`,
-      );
+      let destination: string = '';
+      for (const place in TravelDestinations) {
+        if (selectedOptions.destination === place) {
+          destination = TravelDestinations[place];
+        }
+      }
+
+      await page.goto(`https://www.google.com/travel/flights?${destination}`);
       this.logger.log(`Successfully go to google flights website`);
 
       await page.setViewport({ width: 1080, height: 1024 });
