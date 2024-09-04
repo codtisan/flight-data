@@ -18,6 +18,15 @@ export class WebCrawlerService {
 
     await page.click(WebElement.DepartureButton);
 
-    await page.waitForSelector(WebElement.MonthData);
+    await page.waitForSelector(WebElement.DayPrice);
+
+    const data = await page.evaluate(() => {
+      const elements = document.querySelectorAll('div[role*="rowgroup"]');
+      return Array.from(elements).map((el) => el.textContent);
+    });
+
+    console.log(data);
   }
+
+  private async processFlightData(): Promise<any> {}
 }

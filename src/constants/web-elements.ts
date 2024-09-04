@@ -1,5 +1,5 @@
 export enum WebElement {
   DepartureButton = 'input[placeholder="Departure"]',
 
-  MonthData = 'div[role="rowgroup"]',
+  DayPrice = 'div[aria-label*="Hong Kong dollars"]',
 }

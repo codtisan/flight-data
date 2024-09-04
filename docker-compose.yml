@@ -1,0 +1,6 @@
+services:
+  server:
+    container_name: flight-crawler-api
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
