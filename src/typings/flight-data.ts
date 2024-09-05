@@ -1,4 +1,5 @@
-import { IsNotEmpty, Min } from 'class-validator';
+import { IsNotEmpty, Min, IsIn } from 'class-validator';
+import { TravelDestinations } from 'src/constants/destinations';
 
 export class FlightResponseDto {
   status: 'success' | 'fail';
@@ -17,5 +18,6 @@ export class FlightOptionDto {
   numberOfCheaper: number;
 
   @IsNotEmpty()
+  @IsIn(Object.keys(TravelDestinations))
   destination: string;
 }

@@ -44,8 +44,10 @@ export class WebCrawlerService {
         const elements = document.querySelectorAll('div[aria-label*="Hong Kong dollars"]');
         return Array.from(elements).map((el) => el.textContent);
       });
+      this.logger.log('Successfully crawl the flight price data');
 
       const processedData = await this.preprocessFlightData(data, selectedOptions.numberOfCheaper);
+      this.logger.log('Successfully preprocess the flight data');
 
       await browser.close();
 
