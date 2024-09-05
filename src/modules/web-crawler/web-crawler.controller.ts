@@ -11,8 +11,6 @@ export class WebCrawlerController {
 
   @Post()
   async getFlightData(@Body() selectedOptions: FlightOptionDto): Promise<any> {
-    return await queue.add(() =>
-      this.webCrawlerService.crawlFlightData(selectedOptions),
-    );
+    return await queue.add(() => this.webCrawlerService.crawlFlightData(selectedOptions));
   }
 }

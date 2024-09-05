@@ -18,9 +18,9 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return health response', () => {
       expect(appController.getHealth()).toBe({
-        status: "success",
-        message: "OK!",
-        timestamp: Time.getCurrentTime()
+        status: 'success',
+        message: 'OK!',
+        timestamp: Time.getCurrentTime(),
       });
     });
   });
