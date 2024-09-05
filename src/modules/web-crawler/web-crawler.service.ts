@@ -10,6 +10,13 @@ import {
 } from 'src/typings/flight-data';
 import { Time } from 'src/utils/time';
 import { findNLowestWithIndices } from 'src/utils/number';
+
+const chromeOptions = [
+  '--no-sandbox',
+  '--single-process',
+  '--disable-setuid-sandbox',
+  '--no-zygote',
+];
 @Injectable()
 export class WebCrawlerService {
   private readonly logger = new Logger(WebCrawlerService.name);
@@ -18,7 +25,15 @@ export class WebCrawlerService {
     selectedOptions: FlightOptionDto,
   ): Promise<FlightResponseDto> {
     try {
-      const browser = await puppeteer.launch({ headless: true });
+      const headless = process.env.HEADLESS;
+      const browser = await puppeteer.launch({
+        headless: headless === 'false' ? false : true,
+        args: chromeOptions,
+        executablePath:
+          process.env.NODE_ENV === 'production'
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath(),
+      });
       const page = await browser.newPage();
       this.logger.log('Successfully Launch browser');
 

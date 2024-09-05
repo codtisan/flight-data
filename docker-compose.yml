@@ -1,6 +1,7 @@
 services:
   server:
     container_name: flight-crawler-api
+    platform: linux/amd64
     build: .
     ports:
-      - "${PORT}:${PORT}"
+      - "${PORT}:3000"

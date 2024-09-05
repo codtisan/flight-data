@@ -1,10 +1,13 @@
-FROM node:20-slim
+FROM ghcr.io/puppeteer/puppeteer:23.1.1
 
-WORKDIR /app
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
+
+WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install
+RUN npm ci
 
 RUN npm run build
 
