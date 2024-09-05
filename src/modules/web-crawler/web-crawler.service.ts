@@ -3,36 +3,23 @@ import puppeteer from 'puppeteer';
 import { TravelDestinations } from 'src/constants/destinations';
 import { WebElement } from 'src/constants/web-elements';
 import 'dotenv/config';
-import {
-  FlightResponseDto,
-  FlightPayloadDto,
-  FlightOptionDto,
-} from 'src/typings/flight-data';
+import { FlightResponseDto, FlightPayloadDto, FlightOptionDto } from 'src/typings/flight-data';
 import { Time } from 'src/utils/time';
 import { findNLowestWithIndices } from 'src/utils/number';
 
-const chromeOptions = [
-  '--no-sandbox',
-  '--single-process',
-  '--disable-setuid-sandbox',
-  '--no-zygote',
-];
+const chromeOptions = ['--no-sandbox', '--single-process', '--disable-setuid-sandbox', '--no-zygote'];
 @Injectable()
 export class WebCrawlerService {
   private readonly logger = new Logger(WebCrawlerService.name);
 
-  public async crawlFlightData(
-    selectedOptions: FlightOptionDto,
-  ): Promise<FlightResponseDto> {
+  public async crawlFlightData(selectedOptions: FlightOptionDto): Promise<FlightResponseDto> {
     try {
       const headless = process.env.HEADLESS;
       const browser = await puppeteer.launch({
         headless: headless === 'false' ? false : true,
         args: chromeOptions,
         executablePath:
-          process.env.NODE_ENV === 'production'
-            ? process.env.PUPPETEER_EXECUTABLE_PATH
-            : puppeteer.executablePath(),
+          process.env.NODE_ENV === 'production' ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath(),
       });
       const page = await browser.newPage();
       this.logger.log('Successfully Launch browser');
@@ -45,7 +32,7 @@ export class WebCrawlerService {
       }
 
       await page.goto(`https://www.google.com/travel/flights?${destination}`);
-      this.logger.log(`Successfully go to google flights website`);
+      this.logger.log('Successfully go to google flights website');
 
       await page.setViewport({ width: 1080, height: 1024 });
 
@@ -54,16 +41,11 @@ export class WebCrawlerService {
       await page.waitForSelector(WebElement.DayPrice);
 
       const data = await page.evaluate(() => {
-        const elements = document.querySelectorAll(
-          'div[aria-label*="Hong Kong dollars"]',
-        );
+        const elements = document.querySelectorAll('div[aria-label*="Hong Kong dollars"]');
         return Array.from(elements).map((el) => el.textContent);
       });
 
-      const processedData = await this.preprocessFlightData(
-        data,
-        selectedOptions.numberOfCheaper,
-      );
+      const processedData = await this.preprocessFlightData(data, selectedOptions.numberOfCheaper);
 
       await browser.close();
 
@@ -78,10 +60,7 @@ export class WebCrawlerService {
     }
   }
 
-  private async preprocessFlightData(
-    data: string[],
-    numberOfCheaper: number = 5,
-  ): Promise<FlightPayloadDto[]> {
+  private async preprocessFlightData(data: string[], numberOfCheaper: number = 5): Promise<FlightPayloadDto[]> {
     const prices = data.map((priceString) => {
       return parseInt(priceString.replace(/[^\d]/g, ''), 10);
     });
