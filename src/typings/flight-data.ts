@@ -4,10 +4,14 @@ import { TravelDestinations } from 'src/constants/destinations';
 export class FlightResponseDto {
   status: 'success' | 'fail';
   message: string;
-  payload: FlightPayloadDto[];
+  payload: {
+    data: FlightDataDto[];
+    from: string;
+    to: string;
+  };
 }
 
-export class FlightPayloadDto {
+export class FlightDataDto {
   price: string;
   date: string;
 }

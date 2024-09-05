@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer';
 import { TravelDestinations } from 'src/constants/destinations';
 import { WebElement } from 'src/constants/web-elements';
 import 'dotenv/config';
-import { FlightResponseDto, FlightPayloadDto, FlightOptionDto } from 'src/typings/flight-data';
+import { FlightResponseDto, FlightDataDto, FlightOptionDto } from 'src/typings/flight-data';
 import { Time } from 'src/utils/time';
 import { findNLowestWithIndices } from 'src/utils/number';
 
@@ -36,6 +36,8 @@ export class WebCrawlerService {
 
       await page.setViewport({ width: 1080, height: 1024 });
 
+      const from = await page.$eval('[aria-label*="Where from?"]', (element) => element.getAttribute('value'));
+
       await page.click(WebElement.DepartureButton);
 
       await page.waitForSelector(WebElement.DayPrice);
@@ -44,6 +46,7 @@ export class WebCrawlerService {
         const elements = document.querySelectorAll('div[aria-label*="Hong Kong dollars"]');
         return Array.from(elements).map((el) => el.textContent);
       });
+
       this.logger.log('Successfully crawl the flight price data');
 
       const processedData = await this.preprocessFlightData(data, selectedOptions.numberOfCheaper);
@@ -54,7 +57,11 @@ export class WebCrawlerService {
       return {
         status: 'success',
         message: 'Successfully extract flight data',
-        payload: processedData,
+        payload: {
+          from: from,
+          to: selectedOptions.destination,
+          data: processedData,
+        },
       };
     } catch (err) {
       this.logger.error(err.message);
@@ -62,7 +69,7 @@ export class WebCrawlerService {
     }
   }
 
-  private async preprocessFlightData(data: string[], numberOfCheaper: number = 5): Promise<FlightPayloadDto[]> {
+  private async preprocessFlightData(data: string[], numberOfCheaper: number = 5): Promise<FlightDataDto[]> {
     const prices = data.map((priceString) => {
       return parseInt(priceString.replace(/[^\d]/g, ''), 10);
     });
